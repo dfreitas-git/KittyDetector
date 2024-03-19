@@ -15,7 +15,7 @@ Circuit consumes about 2mA on average.   Runs on one 18650 battery which should 
 - 5v continuous sounding Piezo-Buzzer
 - 100K potentiometer for range-control
 - Common Resistors/Caps/Diodes/Switches
-- 18650 battery with 1S BMS module
+- 18650 battery, holder, and 1S TP4056 BMS module
 
 dlf  3/16/2024
 
