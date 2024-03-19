@@ -23,3 +23,8 @@ dlf  3/16/2024
 ## Schematics
 ![Alt text](./Schematic_KittyDetector.png "Schematic_KittyDetector")
 
+## Build
+## Single 18650 with 1S BMS soldered on the end and stuck in place with hot-melt glue.  The Rest just stuffed into the box (Fish Paper to keep things from shorting)!
+![Alt text](./Inside.png "Inside of Box")
+## Looks better on the outside.
+![Alt text](./Outside.png "Outside of Box")
