@@ -11,7 +11,7 @@ int alarmDist;
 int batteryVoltage;
 
 // **************   I/O Pin Definitions  *********
-const uint8_t BUZZER = 4;           // Buzzer + pin
+const uint8_t BUZZER = 3;           // Buzzer + pin
 
 // Timer vars
 const int WARNING_BUZZ_DURATION = 2000;   // How long (ms) to buzz the buzzer to warn of proximity violation
