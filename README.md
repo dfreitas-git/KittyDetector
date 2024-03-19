@@ -1,7 +1,6 @@
 # KittyDetector
 
-* Cat "stay-off-counter" alarm.   Laser range finder detects cat.  One distance zones defined.
-If cat gets within the detection zone, then a warning beep sounds.  
+* Cat "stay-off-counter" alarm.   Laser range finder detects cat.  If cat gets within the detection zone, then a warning beep sounds.  
 
 * The detection zone is controlled with a potentiometer that will adjust from 0mm to 1023mm. 
 
