@@ -30,11 +30,14 @@ int alarmDist;
 
 // I/O Pin Definitions
 const uint8_t BUZZER = 3;     // Buzzer + pin
+const uint8_t LED = 5;        // Low batter LED
 
 // Timer vars
 const int WARNING_BUZZ_DURATION = 2000;   // How long (ms) to buzz the buzzer to warn of proximity violation
 const int CHIRP_DURATION= 100;            // How long to chirp when the battery is low (in ms)
 const long CHIRP_INTERVAL= 60000;         // How long between chirps (in ms)
+const int LED_DURATION= 500;              // How long to flash LED (in ms)
+const int LED_INTERVAL= 5000;             // How long between flashes (in ms)
 
 // ADC reference adjust.  Set as a percent by measuring battery and comparing to calculated value
 const float ADC_REF_ADJUST = 1.08;
@@ -57,11 +60,13 @@ void setup() {
   // Pot to set the alarm range.  Sets the alarmDist.  
   pinMode(A0, INPUT);  //Range potentiometer
   pinMode(BUZZER,OUTPUT);
+  pinMode(LED,OUTPUT);
 
   // Use 1.1v bandgap as reference for ADC's
   analogReference(INTERNAL);
   
   digitalWrite(BUZZER,0);
+  digitalWrite(LED,0);
 
   if (!laserRanger.begin()) {
     Serial.println(F("Failed to boot laserRanger VL53L0X"));
@@ -91,10 +96,10 @@ void loop() {
   // If the battery is drained to the limit, go into chirping loop
   if(batteryVoltage <= BATTERY_LOW_LIMIT) {
     while(1) {
-      digitalWrite(BUZZER,1);
-      delay(CHIRP_DURATION);
-      digitalWrite(BUZZER,0);
-      delay(CHIRP_INTERVAL);
+      digitalWrite(LED,1);
+      delay(LED_DURATION);
+      digitalWrite(LED,0);
+      delay(LED_INTERVAL);
     }
   }
 
