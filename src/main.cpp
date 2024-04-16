@@ -34,15 +34,16 @@ const uint8_t LED = 5;        // Low batter LED
 
 // Timer vars
 const int WARNING_BUZZ_DURATION = 2000;   // How long (ms) to buzz the buzzer to warn of proximity violation
-const int CHIRP_DURATION= 100;            // How long to chirp when the battery is low (in ms)
-const long CHIRP_INTERVAL= 60000;         // How long between chirps (in ms)
-const int LED_DURATION= 500;              // How long to flash LED (in ms)
-const int LED_INTERVAL= 5000;             // How long between flashes (in ms)
+const int LOW_BAT_LED_DURATION= 200;      // How long to flash LED (in ms) for battery low 
+const int LOW_BAT_LED_INTERVAL= 1800;     // How long between flashes (in ms)
+const int POWER_LED_DURATION= 200;        // How long to flash LED (in ms) to indicate power is on
+const int COUNT_UNTIL_FLASH= 10;          // Flash the LED after this many measurements just to show power is on
+int countUntilFlash;
 
 // ADC reference adjust.  Set as a percent by measuring battery and comparing to calculated value
 const float ADC_REF_ADJUST = 1.08;
 
-// Low limit (in millivolts) before signaling low battery (with chirps)
+// Low limit (in millivolts) before signaling low battery 
 const int BATTERY_LOW_LIMIT = 3500;  
 int batteryVoltage;
 
@@ -66,12 +67,17 @@ void setup() {
   analogReference(INTERNAL);
   
   digitalWrite(BUZZER,0);
-  digitalWrite(LED,0);
+
 
   if (!laserRanger.begin()) {
     Serial.println(F("Failed to boot laserRanger VL53L0X"));
     while(1);
   }
+
+  // One flash to show all is well
+  digitalWrite(LED,1);
+  delay(1000);
+  digitalWrite(LED,0);
 }
 
 
@@ -82,7 +88,13 @@ void loop() {
   // Enter power down state for 1 second with ADC and BOD module disabled.
   LowPower.powerDown(SLEEP_1S, ADC_OFF, BOD_OFF);  
   
-  // Waking up.  Go check the sensor
+  // Waking up.  Go check the sensor (but first see if we need to flash the LED)
+  if(countUntilFlash-- == 0) {
+    countUntilFlash=COUNT_UNTIL_FLASH;
+    digitalWrite(LED,1);
+    delay(POWER_LED_DURATION);
+    digitalWrite(LED,0);
+  }
 
   // First check the range Pot.  No mapping necessary as we are using 1023mm as our max distance.
   // So, just read the 0-1023 value and use as our alarm range.  
@@ -93,13 +105,13 @@ void loop() {
   // We use a voltage divider R2 over R1 to drop 4.2v down to 1.1v for the ADC as we're using the internal 1.1v bandgap
   batteryVoltage = analogRead(A1) * 4.1 * ADC_REF_ADJUST;
 
-  // If the battery is drained to the limit, go into chirping loop
+  // If the battery is drained to the limit, go into flashing loop
   if(batteryVoltage <= BATTERY_LOW_LIMIT) {
     while(1) {
       digitalWrite(LED,1);
-      delay(LED_DURATION);
+      delay(LOW_BAT_LED_DURATION);
       digitalWrite(LED,0);
-      delay(LED_INTERVAL);
+      delay(LOW_BAT_LED_INTERVAL);
     }
   }
 
